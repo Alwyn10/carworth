@@ -1,0 +1,66 @@
+{
+  "model": "Ridge regression",
+  "source": "cardekho.csv",
+  "demo": false,
+  "trained_rows": 3575,
+  "ref_year": 2020,
+  "cleaning": {
+    "rows_in": 4340,
+    "dropped_missing": 0,
+    "dropped_duplicates": 763,
+    "dropped_implausible": 2,
+    "ref_year": 2020,
+    "rows_out": 3575
+  },
+  "comparison": [
+    {
+      "model": "Baseline (always the median price)",
+      "cv_mae": 271931.95244755247,
+      "cv_mdape": 0.4696969696969695,
+      "test_mae": 288157.0699300699,
+      "test_mdape": 0.48529411764705865
+    },
+    {
+      "model": "Ridge regression",
+      "cv_mae": 136350.45039353636,
+      "cv_mdape": 0.24249565189607675,
+      "test_mae": 147875.65315221238,
+      "test_mdape": 0.25812912645413805
+    },
+    {
+      "model": "Random forest",
+      "cv_mae": 146553.47521953977,
+      "cv_mdape": 0.24832793405682735,
+      "test_mae": 157752.19570745813,
+      "test_mdape": 0.2551603052878349
+    },
+    {
+      "model": "Gradient boosting",
+      "cv_mae": 143759.10815047697,
+      "cv_mdape": 0.24577236467318075,
+      "test_mae": 158719.86404940198,
+      "test_mdape": 0.2524595349664256
+    }
+  ],
+  "interval": {
+    "level": 0.8,
+    "low_ratio": 0.6179009661941971,
+    "high_ratio": 1.5919864525722582,
+    "test_coverage": 0.7972027972027972
+  },
+  "typical": {
+    "age": 7,
+    "km_driven": 60000,
+    "brand": "Maruti",
+    "fuel": "Diesel",
+    "seller_type": "Individual",
+    "transmission": "Manual",
+    "owner": "First Owner"
+  },
+  "ranges": {
+    "age_max": 28,
+    "km_p99": 222581,
+    "year_min": 1992,
+    "year_max": 2020
+  }
+}

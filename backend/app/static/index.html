@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CarWorth: is that used car priced fairly?</title>
+  <meta name="description" content="Check a used car’s asking price against thousands of real listings.">
+  <meta name="theme-color" content="#FFC800">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23FFC800'/%3E%3Crect x='3' y='3' width='26' height='26' rx='5' fill='none' stroke='%231D1C1A' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="plate" href="/" aria-label="CarWorth home">CARWORTH</a>
+      <div class="topbar-actions">
+        <span id="demo-chip" class="chip chip-demo" hidden>Demo data</span>
+        <button id="about-btn" class="link-btn" type="button">How it works</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <h1>Is that used car priced fairly?</h1>
+        <p class="lede">Enter the car’s details and the asking price. CarWorth compares them with thousands of real listings, then shows what the car should cost and why.</p>
+        <div class="road" aria-hidden="true"></div>
+        <div id="banner" class="banner" role="status" hidden></div>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <form id="form" class="panel form" aria-label="Car details">
+        <div class="grid2">
+          <div class="field"><label for="brand">Brand</label><select id="brand" class="control" required></select></div>
+          <div class="field"><label for="year">Model year</label><input id="year" class="control" type="number" inputmode="numeric" step="1" required></div>
+        </div>
+        <div class="field">
+          <label for="km">Kilometres driven</label>
+          <input id="km" class="control" type="number" inputmode="numeric" min="0" max="500000" step="1000" required>
+          <p id="km-help" class="help"></p>
+        </div>
+        <fieldset class="field"><legend>Fuel</legend><div id="fuel" class="seg"></div></fieldset>
+        <fieldset class="field"><legend>Gearbox</legend><div id="transmission" class="seg"></div></fieldset>
+        <div class="grid2">
+          <div class="field"><label for="seller">Seller</label><select id="seller" class="control" required></select></div>
+          <div class="field"><label for="owner">Owner</label><select id="owner" class="control" required></select></div>
+        </div>
+        <div class="field">
+          <label for="asking">Asking price <span class="opt">(optional)</span></label>
+          <div class="money"><span aria-hidden="true">₹</span><input id="asking" class="control" type="number" inputmode="numeric" min="0" step="1000"></div>
+          <p id="asking-help" class="help">Add it to get a verdict.</p>
+        </div>
+        <button id="submit" class="btn reveal" type="submit"><span id="submit-label">Check this car</span><span class="spinner" aria-hidden="true"></span></button>
+        <p id="form-error" class="form-error" role="alert" hidden></p>
+      </form>
+
+      <div class="results">
+        <section id="empty" class="panel empty">
+          <svg class="car" viewBox="0 0 240 110" role="img" aria-label="Side view of a car">
+            <path class="car-body" d="M16 80V64q0-9 9-11l38-7 22-24q4-5 11-5h56q7 0 12 5l22 24 31 7q9 2 9 11v16z"/>
+            <path class="car-glass" d="M86 44l14-18h44l18 18z"/>
+            <circle class="car-wheel" cx="66" cy="82" r="17"/><circle class="car-hub" cx="66" cy="82" r="6"/>
+            <circle class="car-wheel" cx="178" cy="82" r="17"/><circle class="car-hub" cx="178" cy="82" r="6"/>
+          </svg>
+          <h2>Your estimate will appear here</h2>
+          <p>Try a car you have seen online. You will get a fair price, the range similar cars sold for, and the reasons behind both.</p>
+        </section>
+
+        <section id="result" class="panel result" aria-live="polite" tabindex="-1" hidden>
+          <div class="result-top">
+            <span id="verdict" class="chip"></span>
+            <p id="verdict-note" class="verdict-note"></p>
+          </div>
+          <div class="result-body">
+            <p class="price-label">Estimated fair price</p>
+            <p id="price" class="price"></p>
+            <p id="range-text" class="range-text"></p>
+            <div id="meter" class="meter" aria-hidden="true">
+              <div id="meter-ask" class="meter-ask"><span id="meter-ask-label"></span></div>
+              <div class="meter-track"><div id="meter-band" class="meter-band"></div><div id="meter-est" class="meter-est"></div></div>
+              <div id="meter-scale" class="meter-scale"></div>
+            </div>
+            <p id="range-fine" class="fine"></p>
+
+            <h3>Why this price</h3>
+            <ul id="factors" class="factors"></ul>
+            <p id="typical-note" class="fine"></p>
+
+            <h3>What it should be worth later</h3>
+            <div id="forecast" class="forecast"></div>
+            <p id="forecast-note" class="fine"></p>
+
+            <div id="warnings"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">CarWorth is a portfolio project. Estimates come from a statistical model, not a valuation, and are not financial advice.</footer>
+
+  <dialog id="about" aria-labelledby="about-title">
+    <div class="dialog-body">
+      <div class="dialog-head">
+        <h2 id="about-title">How CarWorth works</h2>
+        <form method="dialog"><button class="icon-btn" aria-label="Close">×</button></form>
+      </div>
+      <div id="about-content"></div>
+    </div>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
