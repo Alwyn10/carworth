@@ -6,7 +6,19 @@ in three years.
 
 **Stack:** Python, scikit-learn, pandas, FastAPI, vanilla JavaScript, Docker, GitHub Actions
 
-<!-- Add a screenshot here after you run the app: ![CarWorth screenshot](screenshot.png) -->
+## Screenshots
+
+**1. Enter a car's details**
+
+![CarWorth home screen with the car details form](screenshots/home.png)
+
+**2. Get a fair price, a range, a verdict and the reasons**
+
+![Estimate showing the verdict, fair price, price range meter and the factors that move the price](screenshots/result.png)
+
+**3. See how accurate the model really is**
+
+![How it works panel showing four models compared on real CarDekho listings](screenshots/how-it-works.png)
 
 ## What you get for each car
 
@@ -90,23 +102,33 @@ Interactive docs at `/docs` while the server is running.
 
 ## Results
 
-_Run the real training command, then paste the table it prints here and write two or three sentences about it. The
-same numbers are saved in `backend/models/metrics.json`._
+Trained on the public CarDekho used-car file. Of 4,340 listings, 763 were exact duplicates and 2 had impossible
+values, leaving 3,575 for training and testing (80/20 split). "Typical error" means half of the predictions were
+within that percentage of the real price.
 
 | Model | Typical error (cross-validation) | Typical error (test) |
 |---|---|---|
-| Baseline (always the median price) | | |
-| Ridge regression | | |
-| Random forest | | |
-| Gradient boosting | | |
+| Baseline (always the median price) | 47.0% | 48.5% |
+| Ridge regression (chosen) | 24.2% | 25.8% |
+| Random forest | 24.8% | 25.5% |
+| Gradient boosting | 24.6% | 25.2% |
 
-The 80% price range held for ___% of unseen test cars.
+- The models cut the typical error roughly in half compared with always guessing the median price.
+- The three real models are within about a percentage point of each other, which is too close to call on 715 test
+  cars. Ridge was chosen by cross-validation on the training data, not by looking at the test set.
+- The 80% price range held for 80% of cars the model had never seen.
+- Removing the 763 duplicates matters: left in, the same car can land in both the training and test sets and make the
+  results look better than they are.
 
 ## Limits (read before trusting a number)
 
 - **The prices are from a snapshot** of listings around the year the data was collected, so today's prices may differ.
   Use CarWorth to compare cars, not as an exact quote.
 - **Listing prices are asking prices**, not final sale prices.
+- **The error is about 25%**, so the 80% price range is wide and the verdict is lenient. It flags clear outliers,
+  not small gaps.
+- **The data has the brand but not the model name**, so a Maruti 800 and a Maruti Ciaz look the same to the model.
+  Adding the model name is the most likely way to lower the error.
 - **It cannot see** condition, accident history, city or the exact variant, only brand, age, kilometres, fuel, seller,
   gearbox and owner count.
 - **The three-year forecast** compares cars of different ages. It does not follow one car through time.
